@@ -1,0 +1,11 @@
+{
+    "db": {
+        "username": "doadmin",
+        "password": "AVNS_9t96d5LxiI63mqpxU1x",
+        "host": "private-checkbook-database-v1-do-user-10002471-0.b.db.ondigitalocean.com",
+        "port": "25060",
+        "database": "defaultdb",
+        "sslmode": "require",
+        "url": "postgresql://doadmin:AVNS_9t96d5LxiI63mqpxU1x@checkbook-database-v1-do-user-10002471-0.b.db.ondigitalocean.com:25060/defaultdb?sslmode=require"
+    }
+}
