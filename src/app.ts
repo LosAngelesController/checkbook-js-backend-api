@@ -2,7 +2,6 @@ import fs from 'fs'
 
 const server = require('http').createServer();
 const socket = require('socket.io')(server);
-
 server.listen(3000);
 
 const config = require('../config.json');
