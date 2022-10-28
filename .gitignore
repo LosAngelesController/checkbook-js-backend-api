@@ -127,3 +127,4 @@ dist
 .pnp.*
 
 config.json
+ca-certificate.crt
