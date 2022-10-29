@@ -1,13 +1,19 @@
 import fs from 'fs'
 
 const server = require('http').createServer();
-const socket = require('socket.io')(server);
+const socket = require('socket.io')(server, {
+  cors: {
+    origins: ["https://checkbook.mejiaforcontroller.com",
+  "http://localhost:3001"],
+    methods: ["GET", "POST"]
+  }
+});
 server.listen(3000);
 
 const config = require('../config.json');
 
 const { Client } = require('pg')
-const client = new Client({
+const pgclient = new Client({
   user: config.db.username,
   host: config.db.host,
   database: config.db.database,
@@ -22,8 +28,8 @@ const client = new Client({
 //connect to the checkbook database before starting the checkbook endpoints
  
 async function main() {
-  await client.connect()
-  const res = await client.query('SELECT * FROM losangelescheckbook LIMIT 100', [])
+  await pgclient.connect()
+  const res = await pgclient.query('SELECT * FROM losangelescheckbook LIMIT 100', [])
   console.log(res.rows) // Hello world!
 
   socket.on('connection', client => {
@@ -44,7 +50,7 @@ async function main() {
   
       if (typeof args.querystring === "string") {
         const start = performance.now();
-        const vendorresults = await client.query(vendorquery, [args.querystring]);
+        const vendorresults = await pgclient.query(vendorquery, [args.querystring]);
         const end = performance.now();
         console.log(vendorresults.rows);
   
