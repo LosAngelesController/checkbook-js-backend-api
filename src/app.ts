@@ -46,7 +46,7 @@ async function main() {
           //SELECT vendor_name, sum(dollar_amount) FROM losangelescheckbook GROUP BY vendor_name;
       //took over 17 seconds to run! a fast query index is required
   
-      const vendorquery = "SELECT * FROM vendor_summed WHERE vendor_name ILIKE '%$1%' ORDER BY sum desc;"
+      const vendorquery = "SELECT * FROM vendor_summed WHERE vendor_name ILIKE '%' || $1 || '%' ORDER BY sum desc LIMIT 100;"
   
       if (typeof args.querystring === "string") {
         const start = performance.now();
@@ -57,7 +57,7 @@ async function main() {
         client.emit("autocompleteresponse", {
           rows: vendorresults.rows,
           timeelapsed: end-start
-        })
+        });
       }
 
     });
