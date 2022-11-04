@@ -4,7 +4,7 @@ const server = require('http').createServer();
 const socket = require('socket.io')(server, {
   cors: {
     origins: ["https://checkbook.mejiaforcontroller.com",
-  "http://localhost:3001"],
+  "http://localhost:3001","http://localhost:3000"],
     methods: ["GET", "POST"]
   }
 });
@@ -12,18 +12,7 @@ server.listen(3000);
 
 const config = require('../config.json');
 
-const { Client } = require('pg')
-const pgclient = new Client({
-  user: config.db.username,
-  host: config.db.host,
-  database: config.db.database,
-  password: config.db.password,
-  port: config.db.port,
-  ssl: {
-    rejectUnauthorized: false,
-    ca: fs.readFileSync('./ca-certificate.crt').toString(),
-  }
-})
+import {pgclient} from './postgres'
 
 //connect to the checkbook database before starting the checkbook endpoints
  
@@ -31,7 +20,6 @@ async function main() {
   await pgclient.connect()
   const res = await pgclient.query('SELECT * FROM losangelescheckbook LIMIT 100', [])
   console.log(res.rows) // Hello world!
-
   socket.on('connection', client => {
     client.on('disconnect', () => { /* … */ });
 
@@ -56,7 +44,8 @@ async function main() {
   
         client.emit("autocompleteresponse", {
           rows: vendorresults.rows,
-          timeelapsed: end-start
+          timeelapsed: end-start,
+          querystring: args.querystring
         });
       }
 
