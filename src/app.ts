@@ -33,6 +33,18 @@ async function main() {
       })
     })
 
+    client.on('getcheckbookrows', async (args) => {
+      /*
+      structure of the thing
+
+      filters: {
+        vendor_query: 'Office Depot'
+        vendor_match: "contains | equals"
+      }
+    
+      */
+    })
+
     client.on("mainautocomplete", async (args) => {
       //this is the google-esque autocomplete on the frontpage
   

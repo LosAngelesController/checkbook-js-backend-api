@@ -38,10 +38,6 @@ Recieves an object like this
     const start = performance.now();
 
     if (typeof vendorstringtosearch === "string") {
-        const vendorpagequery = "SELECT * FROM losangelescheckbook WHERE vendor_name ILIKE $1"
-        const vendorpageresults = await pgclient.query(vendorpagequery, 
-            [vendorstringtosearch]);
-
           //number of transactions and total this year
          // const thisyear = "select SUM(dollar_amount), COUNT(id_number) from losangelescheckbook WHERE vendor_name LIKE $1 AND transaction_date >= '2022-01-01' AND transaction_date <= '2022-12-31'"
           const thisyear = "SELECT * FROM latestyearpervendorsummary WHERE vendor_name = $1"
