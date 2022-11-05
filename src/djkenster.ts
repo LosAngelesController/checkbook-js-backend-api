@@ -43,7 +43,8 @@ Recieves an object like this
             [vendorstringtosearch]);
 
           //number of transactions and total this year
-          const thisyear = "select SUM(dollar_amount), COUNT(id_number) from losangelescheckbook WHERE vendor_name LIKE $1 AND transaction_date >= '2022-01-01' AND transaction_date <= '2022-12-31'"
+         // const thisyear = "select SUM(dollar_amount), COUNT(id_number) from losangelescheckbook WHERE vendor_name LIKE $1 AND transaction_date >= '2022-01-01' AND transaction_date <= '2022-12-31'"
+          const thisyear = "SELECT * FROM latestyearpervendorsummary WHERE vendor_name = $1"
 
           const totalcost = "SELECT * FROM vendor_summed WHERE vendor_name = $1"
           const totalnumberoftransactions = "SELECT * FROM numberoftransactionspervendor WHERE vendor_name = $1"
