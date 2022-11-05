@@ -15,7 +15,8 @@ async function djkenster() {
     // Hello world!
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.type('html');
+  res.send('Hello World!');
 });
 
 app.all('/vendorpage', [cors({
