@@ -33,7 +33,7 @@ Recieves an object like this
 
 */
 
-    var vendorstringtosearch = req.body.params.vendor;
+    var vendorstringtosearch = decodeURI(req.body.params.vendor).toUpperCase();
 
     const start = performance.now();
 
