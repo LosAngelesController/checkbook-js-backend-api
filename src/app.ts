@@ -26,7 +26,7 @@ async function main() {
     client.on('fetchdepts', async (args) => {
       const deptallquery = 'SELECT * FROM department_summary';
 
-      const vendorresults = await pgclient.query(deptallquery, []);
+      const vendorresults = await pgclient.query(deptallquery);
 
       client.emit('alldepts', {
         rows: vendorresults.rows
