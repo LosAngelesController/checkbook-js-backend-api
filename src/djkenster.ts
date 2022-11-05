@@ -4,8 +4,6 @@ import cors from 'cors'
 //DJKenster is the http api endpoint for checkbook.
 //https://djkenster.checkbook.mejiaforcontroller.com/vendorpage/
 
-
-
 const express = require('express')
 const app = express()
 const port = 3713;
@@ -13,7 +11,8 @@ const port = 3713;
 async function djkenster() {
     await pgclient.connect()
     const res = await pgclient.query('SELECT * FROM losangelescheckbook LIMIT 100', [])
-    console.log(res.rows) // Hello world!
+    console.log(res.rows)
+    // Hello world!
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -45,8 +44,7 @@ Recieves an object like this
         const end = performance.now();
     }
 
-
-      
+    
 
   });
 

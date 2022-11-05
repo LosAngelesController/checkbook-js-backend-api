@@ -23,6 +23,16 @@ async function main() {
   socket.on('connection', client => {
     client.on('disconnect', () => { /* … */ });
 
+    client.on('fetchdepts', async (args) => {
+      const deptallquery = 'SELECT * FROM department_summary';
+
+      const vendorresults = await pgclient.query(deptallquery, []);
+
+      client.emit('alldepts', {
+        rows: vendorresults.rows
+      })
+    })
+
     client.on("mainautocomplete", async (args) => {
       //this is the google-esque autocomplete on the frontpage
   

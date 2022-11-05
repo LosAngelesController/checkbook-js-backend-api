@@ -53,3 +53,15 @@ CREATE INDEX vendor_summed_namequicksearch ON losangelescheckbook USING gin (ven
 query fast autocomplete!
 ```sql
 SELECT * FROM vendor_summed WHERE vendor_name ILIKE '%$1%' ORDER BY sum desc;
+```
+
+SAME THING FOR DETAILED ITEMS
+```sql
+CREATE TABLE detailed_item_description_quick AS (
+SELECT detailed_item_description, COUNT(id_number), SUM(dollar_amount) FROM losangelescheckbook GROUP BY detailed_item_description
+)
+```
+
+```sql
+CREATE INDEX fastdetaileddescriptionwordsearch ON detailed_item_description_quick USING gin (detailed_item_description gin_trgm_ops);
+```
