@@ -59,8 +59,10 @@ app.all('/vendortransactionsovertimedeptpermonth', [cors({
  try {
   //selecting without the vendor_name shortened the response time from 1.6s to 1.3s
   const selectforbargraphovertime = "select sum(dollar_amount) AS dollar_amount ,sum(count) AS count,DATE_TRUNC('month',transaction_date),department_name from vendorovertimechartdept WHERE vendor_name ILIKE $1 GROUP BY DATE_TRUNC('month',transaction_date), department_name"
-  const timelineresults = pgclient.query(selectforbargraphovertime, [req.body.params.vendor]);
+  const timelineresults = await pgclient.query(selectforbargraphovertime, [req.body.params.vendor]);
   
+console.log(timelineresults)
+
   res.type('json')
         res.send({
           rows: timelineresults.rows
