@@ -38,12 +38,77 @@ async function main() {
       structure of the thing
 
       filters: {
-        vendor_query: 'Office Depot'
-        vendor_match: "contains | equals"
-      }
+        vendor: {
+          query: 'Office Depot',
+          match: "contains | equals"
+        }
+      },
+      offset: 100 (skips rows already loaded),
+      forcescrollmethod?: "all" | "scroll"
+
+      */
+
+      /*
+
+      by default, the fetch method is infinite scrolling via loadmethod = 'scroll'
+      if the vendor match is equal and the vendor query is found with a number of rows < 2000,
+      disable as you go scrolling by loadmethod = 'all'
     
       */
-    })
+
+      var loadmethod = 'scroll';
+
+      if (
+        args.forcescrollmethod === "default" || args.forcescrollmethod === undefined
+      ) {
+        if (args.forcescrollmethod === undefined || args.forcescrollmethod != false) {
+          if (args.filters) {
+            if (args.filters.vendor) {
+              if (args.filters.vendor.match === "equals") {
+                const checktheamountofvendors = 'SELECT * numberoftransactionspervendor WHERE vendor_name = $1'
+    
+                const vendorcount = await pgclient.query(checktheamountofvendors, [args.filters.vendor.query])
+    
+                if (vendorcount.rows) {
+                  if (vendorcount.rows[0]) {
+                    if (parseInt(vendorcount.rows[0].count) < 1500) {
+                      loadmethod = 'all'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+
+      var query = 'SELECT * FROM losangelescheckbook '
+
+      var alreadystarted:boolean = false      
+
+      if (args.filters) {
+        query += " WHERE "
+        if (args.filters.vendor) {
+          if (args.filters.vendor.query) {
+            query +=  ""
+            alreadystarted = true;
+          }
+        }
+        if (args.filters.detaileddescription) {
+          if (alreadystarted === true) {
+            query += " AND "
+          }
+          query += ""
+        }
+      }
+
+      if (loadmethod === 'scroll') {
+        const offsetnumber = '100'
+        query += ` LIMIT 100 OFFSET ${offsetnumber}`
+      }
+      
+    });
 
     client.on("mainautocomplete", async (args) => {
       //this is the google-esque autocomplete on the frontpage

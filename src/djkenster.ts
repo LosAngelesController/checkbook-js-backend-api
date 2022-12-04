@@ -19,6 +19,58 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.all('/deptpage', [cors({
+  "origin": "*"
+}), express.json()],async (req, res) => {
+  /*
+
+Recieves an object like this 
+{
+  params: {
+      "vendor": "The Glue, LLC"
+  }
+}
+
+*/
+
+});
+
+app.all('/vendortransactionsovertimedeptall', [cors({
+  "origin": "*"
+}), express.json()], async (req, res) => {
+ try {
+  //selecting without the vendor_name shortened the response time from 1.6s to 1.3s
+  const selectforbargraphovertime = "select dollar_amount,count,transaction_date,department_name from vendorovertimechartdept WHERE vendor_name ILIKE $1"
+  const timelineresults = pgclient.query(selectforbargraphovertime, [req.body.params.vendor]);
+  
+  res.type('json')
+        res.send({
+          rows: timelineresults.rows
+        })
+
+ } catch (errorofvendor) {
+  console.error(errorofvendor)
+ }
+})
+
+app.all('/vendortransactionsovertimedeptpermonth', [cors({
+  "origin": "*"
+}), express.json()], async (req, res) => {
+ try {
+  //selecting without the vendor_name shortened the response time from 1.6s to 1.3s
+  const selectforbargraphovertime = "select sum(sum) AS dollar_amount ,sum(count) AS count,DATE_TRUNC('month',transaction_date),department_name from vendorovertimechartdept WHERE vendor_name ILIKE $1 GROUP BY DATE_TRUNC('month',transaction_date), department_name"
+  const timelineresults = pgclient.query(selectforbargraphovertime, [req.body.params.vendor]);
+  
+  res.type('json')
+        res.send({
+          rows: timelineresults.rows
+        })
+
+ } catch (errorofvendor) {
+  console.error(errorofvendor)
+ }
+})
+
 app.all('/vendorpage', [cors({
     "origin": "*"
   }), express.json()],async (req, res) => {
