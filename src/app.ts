@@ -18,6 +18,12 @@ import {pgclient} from './postgres'
  
 async function main() {
   await pgclient.connect()
+
+  pgclient.on('end', (err, cli) => {
+    console.error('DATABASE CONNECTION ENDED. RETRYING IN 2 SECONDS...');
+    pgclient.connect();
+  })
+
   const res = await pgclient.query('SELECT * FROM losangelescheckbook LIMIT 100', [])
   console.log(res.rows) // Hello world!
   socket.on('connection', client => {
